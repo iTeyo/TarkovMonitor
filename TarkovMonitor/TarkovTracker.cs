@@ -28,6 +28,10 @@ namespace TarkovMonitor
             [Post("/progress/tasks")]
             [Headers("Authorization: Bearer")]
             Task<string> SetTaskStatuses([Body] List<TaskStatusBody> body);
+
+            [Post("/position")]
+            [Headers("Authorization: Bearer")]
+            Task UploadPosition([Body] PositionBody body);
         }
 
         private static ITarkovTrackerAPI api = InitAPI();
@@ -44,6 +48,7 @@ namespace TarkovMonitor
         public static Dictionary<string, string> Domains = new() {
             { "tarkovtracker.io", "TarkovTracker.io" },
             { "tarkovtracker.org", "TarkovTracker.org" },
+            { "tarkov.iteyo.eu", "tarkov.iteyo.eu" },
         };
 
         static TarkovTracker() {
@@ -362,6 +367,41 @@ namespace TarkovMonitor
             }
             var built = Progress.data.hideoutModulesProgress.Find(m => m.id == stationLevel.id && m.complete);
             return built != null;
+        }
+
+        public static async Task UploadPosition(string map, Position position, float rotation)
+        {
+            if (!ValidToken)
+            {
+                return;
+            }
+            try
+            {
+                await api.UploadPosition(new PositionBody
+                {
+                    map = map,
+                    position = new PositionCoords { x = position.X, y = position.Y, z = position.Z },
+                    rotation = rotation,
+                });
+            }
+            catch (Exception)
+            {
+                // silently ignore upload failures to avoid spamming the user
+            }
+        }
+
+        public class PositionBody
+        {
+            public string map { get; set; }
+            public PositionCoords position { get; set; }
+            public float rotation { get; set; }
+        }
+
+        public class PositionCoords
+        {
+            public float x { get; set; }
+            public float y { get; set; }
+            public float z { get; set; }
         }
 
         public class TokenResponse
