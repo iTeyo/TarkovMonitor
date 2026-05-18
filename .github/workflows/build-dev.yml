@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: "6.x" # Change this to the desired .NET version
+          dotnet-version: "8.x"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -31,4 +31,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Published Application
-          path: TarkovMonitor\bin\Release\net6.0-windows\win-x64\publish\*
+          path: TarkovMonitor\bin\Release\net8.0-windows\win-x64\publish\*

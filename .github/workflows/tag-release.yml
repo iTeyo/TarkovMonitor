@@ -16,7 +16,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: "6.x" # Change this to the desired .NET version
+          dotnet-version: "8.x"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -27,7 +27,7 @@ jobs:
       - name: Creare Build Release Archive
         shell: pwsh
         run: |
-          cd TarkovMonitor/bin/Release/net6.0-windows/win-x64/publish
+          cd TarkovMonitor/bin/Release/net8.0-windows/win-x64/publish
           Compress-Archive -Destination $Env:GITHUB_WORKSPACE/TarkovMonitor.zip -Path .\*
 
       - name: Create GitHub Release
