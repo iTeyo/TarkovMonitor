@@ -347,6 +347,10 @@ namespace TarkovMonitor
                 socketMessages.Add(SocketClient.GetNavigateToMapMessage(map));
             }
             SocketClient.Send(socketMessages);
+            if (Properties.Settings.Default.tarkovTrackerDomain == "tarkov.iteyo.eu")
+            {
+                await TarkovTracker.UploadPosition(e.RaidInfo.Map, e.Position, e.Rotation);
+            }
         }
 
         private void UpdateCheck_Error(object? sender, ExceptionEventArgs e)
